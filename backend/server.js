@@ -10,6 +10,8 @@ dotenv.config(); // allow to read the content of dotenv file
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.use(express.json()); // allows you to parse the body of the request
+
 // authentication
 app.use("/api/auth", authRoutes);
 
