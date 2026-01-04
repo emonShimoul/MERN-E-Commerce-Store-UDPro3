@@ -56,4 +56,10 @@ userSchema.pre("save", async function (next) {
     }
 })
 
+// if user details = john 123456
+// in login if user provide wrong password such as 1234567 => invalid credentials
+userSchema.methods.comparePassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+}
+
 export default User;
