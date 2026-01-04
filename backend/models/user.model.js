@@ -7,9 +7,26 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, "Password is required"],
+        required: [true, "Email is required"],
         unique: true,
         lowercase: true,
         trim: true
     },
+    password: {
+        type: String,
+        required: [true, "Password is required"],
+        minlength: [6, "Password must be at least 6 character long"]
+    },
+    cartItems: [
+        {
+            quantity:{
+                type: Number,
+                default: 1
+            },
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product"
+            }
+        }
+    ]
 })
