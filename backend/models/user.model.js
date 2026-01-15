@@ -34,32 +34,27 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["customer", "admin"],
         default: "customer"
-    }
+    },
 }, 
 {
     // createdAt, updatedAt
     timestamps: true
 });
 
-const User = mongoose.model("User", userSchema);
-
 // pre-save hook to hash password before saving to db
-userSchema.pre("save", async function (next) {
-    if(!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
 
-    try{
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch(error){
-        next(error);
-    }
-})
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
 // if user details = john 123456
 // in login if user provide wrong password such as 1234567 => invalid credentials
 userSchema.methods.comparePassword = async function (password) {
     return bcrypt.compare(password, this.password);
-}
+};
+
+const User = mongoose.model("User", userSchema);
 
 export default User;
